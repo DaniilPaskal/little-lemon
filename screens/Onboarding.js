@@ -47,3 +47,5 @@ const Onboarding = ({ navigation }) => {
     </View>
     );
 }
+
+export default Onboarding;
