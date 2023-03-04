@@ -3,12 +3,23 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Onboarding from './screens/Onboarding';
+import Profile from './screens/Profile';
+import SplashScreen from './screens/SplashScreen';
 
 export default function App() {
+  if (state.isLoading) {
+    return (
+      <SplashScreen />
+    );
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name='Onboarding' component={Onboarding} />
+        {state.isOnboardingComplete 
+          ?  <Stack.Screen name='Profile' component={Profile} />
+          :  <Stack.Screen name='Onboarding' component={Onboarding} />
+        }
       </Stack.Navigator>
     </NavigationContainer>
   );
