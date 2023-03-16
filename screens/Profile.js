@@ -22,6 +22,11 @@ const Profile = ({ navigation }) => {
         })
     })
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUser({ ...user, [name]: value });
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.headerWrapper}>
@@ -71,15 +76,15 @@ const Profile = ({ navigation }) => {
             <TextInput 
                 style={styles.inputBox}
                 value={user.firstName}
-                onChangeText={onChangeName}
+                onChangeText={handleChange}
             />
             <Text style={styles.regularText}>
                 Last name
             </Text>
             <TextInput 
                 style={styles.inputBox}
-                value={lastName}
-                onChangeText={onChangeName}
+                value={user.lastName}
+                onChangeText={handleChange}
             />
             <Text style={styles.regularText}>
                 Email
@@ -87,7 +92,7 @@ const Profile = ({ navigation }) => {
             <TextInput 
                 style={styles.inputBox}
                 value={user.email}
-                onChangeText={onChangeEmail}
+                onChangeText={handleChange}
                 onBlur={() => setValid(validateEmail(email))}
                 keyboardType={'email-address'}
             />
@@ -96,8 +101,8 @@ const Profile = ({ navigation }) => {
             </Text>
             <TextInput 
                 style={styles.inputBox}
-                value={email}
-                onChangeText={onChangeEmail}
+                value={user.phoneNumber}
+                onChangeText={handleChange}
                 onBlur={() => setValid(validateNumber(email))}
                 keyboardType={'phone-number'}
             />
