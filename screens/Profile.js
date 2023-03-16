@@ -1,13 +1,95 @@
 import * as React from 'react';
 import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
+import { validateEmail } from '../utils';
 
 const Profile = ({ navigation }) => {
     
 
     return (
-    <View style={styles.container}>
-        
-    </View>
+        <View style={styles.container}>
+            <View style={styles.headerWrapper}>
+                <Image
+                    style={styles.image}
+                    source={require('../assets/little-lemon-logo.png')}
+                    resizeMode='contain'
+                    accessible={true}
+                    accessibilityLabel={'Little Lemon Logo'}
+                />
+            </View>
+            <Text style={styles.regularText}>
+                Personal information
+            </Text>
+            <View style={styles.headerWrapper}>
+                <Text style={styles.regularText}>
+                    Avatar
+                </Text>
+                <Image
+                    style={styles.image}
+                    source={require('../assets/little-lemon-logo.png')}
+                    resizeMode='contain'
+                    accessible={true}
+                    accessibilityLabel={'User profile image'}
+                />
+                <Pressable
+                    style={styles.buttonEnabled}
+                    onPress={onboard()}
+                >
+                    <Text style={styles.buttonText}>
+                        Change
+                    </Text>
+                </Pressable>
+                <Pressable
+                    style={styles.buttonEnabled}
+                    onPress={onboard()}
+                >
+                    <Text style={styles.buttonText}>
+                        Remove
+                    </Text>
+                </Pressable>
+            </View>
+
+            <Text style={styles.regularText}>
+                First name
+            </Text>
+            <TextInput 
+                style={styles.inputBox}
+                value={firstName}
+                onChangeText={onChangeName}
+            />
+            <Text style={styles.regularText}>
+                Last name
+            </Text>
+            <TextInput 
+                style={styles.inputBox}
+                value={lastName}
+                onChangeText={onChangeName}
+            />
+            <Text style={styles.regularText}>
+                Email
+            </Text>
+            <TextInput 
+                style={styles.inputBox}
+                value={email}
+                onChangeText={onChangeEmail}
+                onBlur={() => setValid(validateEmail(email))}
+                keyboardType={'email-address'}
+            />
+            <Text style={styles.regularText}>
+                Phone number
+            </Text>
+            <TextInput 
+                style={styles.inputBox}
+                value={email}
+                onChangeText={onChangeEmail}
+                onBlur={() => setValid(validateNumber(email))}
+                keyboardType={'phone-number'}
+            />
+
+            <Text style={styles.regularText}>
+                Email notifications
+            </Text>
+            
+        </View>
     );
 }
 
