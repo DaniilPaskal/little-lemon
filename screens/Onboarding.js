@@ -9,9 +9,14 @@ const Onboarding = ({ navigation }) => {
     const [valid, setValid] = useState(false);
 
     const saveData = async (firstName, email) => {
+        const user = {
+            firstName: {firstName},
+            email: {email},
+        }
+
         try {
-            await AsyncStorage.setItem('first-name', firstName);
-            await AsyncStorage.setItem('email', email);
+            const jsonValue = JSON.stringify(user);
+            await AsyncStorage.setItem('user', jsonValue);
         } catch (e) {
             console.error();
         }
