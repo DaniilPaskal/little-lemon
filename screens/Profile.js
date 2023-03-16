@@ -1,9 +1,26 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { validateEmail } from '../utils';
 
 const Profile = ({ navigation }) => {
-    
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const values = await AsyncStorage.multiGet(Object.keys(user));
+                const user = values.reduce((acc, curr) => {
+                    acc[curr[0]] = JSON.parse(curr[1]);
+                    return acc;
+                }, {});
+                setUser(user);
+            } catch (e) {
+                console.error();
+            }
+        })
+    })
 
     return (
         <View style={styles.container}>
@@ -53,7 +70,7 @@ const Profile = ({ navigation }) => {
             </Text>
             <TextInput 
                 style={styles.inputBox}
-                value={firstName}
+                value={user.firstName}
                 onChangeText={onChangeName}
             />
             <Text style={styles.regularText}>
@@ -69,7 +86,7 @@ const Profile = ({ navigation }) => {
             </Text>
             <TextInput 
                 style={styles.inputBox}
-                value={email}
+                value={user.email}
                 onChangeText={onChangeEmail}
                 onBlur={() => setValid(validateEmail(email))}
                 keyboardType={'email-address'}
