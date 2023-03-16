@@ -8,7 +8,7 @@ const Onboarding = ({ navigation }) => {
     const [firstName, onChangeName] = useState('');
     const [valid, setValid] = useState(false);
 
-    const saveData = async (name, email) => {
+    const saveData = async (firstName, email) => {
         try {
             await AsyncStorage.setItem('first-name', firstName);
             await AsyncStorage.setItem('email', email);
