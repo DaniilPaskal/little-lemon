@@ -1,10 +1,25 @@
 import * as React from 'react';
 import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Onboarding = ({ navigation }) => {
     const [email, onChangeEmail] = useState('');
     const [name, onChangeName] = useState('');
     const [valid, setValid] = useState(false);
+
+    const saveData = async (name, email) => {
+        try {
+            await AsyncStorage.setItem('name', name);
+            await AsyncStorage.setItem('email', email);
+        } catch (e) {
+            console.error();
+        }
+    }
+
+    const onboard = () => {
+        saveData(name, email);
+        navigation.navigate('Profile');
+    }
 
     return (
     <View style={styles.container}>
@@ -22,9 +37,9 @@ const Onboarding = ({ navigation }) => {
         </Text>
         <TextInput 
             style={styles.inputBox}
-            value={firstName}
+            value={name}
             onChangeText={onChangeName}
-            onBlur={() => setValid(validateName(firstName))}
+            onBlur={() => setValid(validateName(name))}
             placeholder={'Type your name'}
         />
             <TextInput 
@@ -38,7 +53,7 @@ const Onboarding = ({ navigation }) => {
         <Pressable
             style={valid ? styles.buttonEnabled : styles.buttonDisabled}
             disabled={valid ? false : true}
-            //onPress={() => navigation.navigate('Subscribe')}
+            onPress={onboard()}
         >
             <Text style={styles.buttonText}>
             Next
