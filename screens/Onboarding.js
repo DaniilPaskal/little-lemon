@@ -22,44 +22,44 @@ const Onboarding = ({ navigation }) => {
     }
 
     return (
-    <View style={styles.container}>
-        <View style={styles.headerWrapper}>
-            <Image
-            style={styles.image}
-            source={require('../assets/little-lemon-logo.png')}
-            resizeMode='contain'
-            accessible={true}
-            accessibilityLabel={'Little Lemon Logo'}
-            />
-        </View>
-        <Text style={styles.regularText}>
-            Let us get to know you!
-        </Text>
-        <TextInput 
-            style={styles.inputBox}
-            value={name}
-            onChangeText={onChangeName}
-            onBlur={() => setValid(validateName(name))}
-            placeholder={'Type your name'}
-        />
-            <TextInput 
-            style={styles.inputBox}
-            value={email}
-            onChangeText={onChangeEmail}
-            onBlur={() => setValid(validateEmail(email))}
-            placeholder={'Type your email'}
-            keyboardType={'email-address'}
-        />
-        <Pressable
-            style={valid ? styles.buttonEnabled : styles.buttonDisabled}
-            disabled={valid ? false : true}
-            onPress={onboard()}
-        >
-            <Text style={styles.buttonText}>
-            Next
+        <View style={styles.container}>
+            <View style={styles.headerWrapper}>
+                <Image
+                style={styles.image}
+                source={require('../assets/little-lemon-logo.png')}
+                resizeMode='contain'
+                accessible={true}
+                accessibilityLabel={'Little Lemon Logo'}
+                />
+            </View>
+            <Text style={styles.regularText}>
+                Let us get to know you!
             </Text>
-        </Pressable>
-    </View>
+            <TextInput 
+                style={styles.inputBox}
+                value={name}
+                onChangeText={onChangeName}
+                onBlur={() => setValid(validateName(name))}
+                placeholder={'Type your name'}
+            />
+                <TextInput 
+                style={styles.inputBox}
+                value={email}
+                onChangeText={onChangeEmail}
+                onBlur={() => setValid(validateEmail(email))}
+                placeholder={'Type your email'}
+                keyboardType={'email-address'}
+            />
+            <Pressable
+                style={valid ? styles.buttonEnabled : styles.buttonDisabled}
+                disabled={valid ? false : true}
+                onPress={onboard()}
+            >
+                <Text style={styles.buttonText}>
+                Next
+                </Text>
+            </Pressable>
+        </View>
     );
 }
 
