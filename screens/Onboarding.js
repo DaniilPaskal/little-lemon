@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { validateEmail } from '../utils';
 
 const Onboarding = ({ navigation }) => {
     const [email, onChangeEmail] = useState('');
