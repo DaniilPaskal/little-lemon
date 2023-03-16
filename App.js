@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Onboarding from './screens/Onboarding';
 import Profile from './screens/Profile';
+import Home from './screens/Home'
 import SplashScreen from './screens/SplashScreen';
 
 export default function App() {
@@ -16,10 +17,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {state.isOnboardingComplete 
-          ?  <Stack.Screen name='Profile' component={Profile} />
-          :  <Stack.Screen name='Onboarding' component={Onboarding} />
-        }
+        {state.isOnboardingComplete ? ( 
+          <>
+            <Stack.Screen name='Home' component={Home} />
+            <Stack.Screen name='Profile' component={Profile} />
+          </>
+         ) : (  
+          <Stack.Screen name='Onboarding' component={Onboarding} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
