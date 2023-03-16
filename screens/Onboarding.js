@@ -4,12 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Onboarding = ({ navigation }) => {
     const [email, onChangeEmail] = useState('');
-    const [name, onChangeName] = useState('');
+    const [firstName, onChangeName] = useState('');
     const [valid, setValid] = useState(false);
 
     const saveData = async (name, email) => {
         try {
-            await AsyncStorage.setItem('name', name);
+            await AsyncStorage.setItem('first-name', firstName);
             await AsyncStorage.setItem('email', email);
         } catch (e) {
             console.error();
@@ -17,7 +17,7 @@ const Onboarding = ({ navigation }) => {
     }
 
     const onboard = () => {
-        saveData(name, email);
+        saveData(firstName, email);
         navigation.navigate('Profile');
     }
 
@@ -37,9 +37,8 @@ const Onboarding = ({ navigation }) => {
             </Text>
             <TextInput 
                 style={styles.inputBox}
-                value={name}
+                value={firstName}
                 onChangeText={onChangeName}
-                onBlur={() => setValid(validateName(name))}
                 placeholder={'Type your name'}
             />
                 <TextInput 
