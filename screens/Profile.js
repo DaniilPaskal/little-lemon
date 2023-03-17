@@ -22,26 +22,52 @@ const Profile = ({ navigation }) => {
         })
     })
 
+    const saveData = async (user) => {
+        try {
+            const jsonValue = JSON.stringify(user);
+            await AsyncStorage.setItem('user', jsonValue);
+        } catch (e) {
+            console.error();
+        }
+    }
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
     }
 
-    const handleLogout = () => {
+    const handleBack = () => {
+        navigation.navigate('Home');
+    }
 
+    const handleChangeImage = () => {
+
+    }
+
+    const handleRemoveImage = () => {
+
+    }
+
+    const handleLogout = () => {
+        AsyncStorage.clear();
+        navigation.navigate('Onboarding');
     }
 
     const handleDiscard = () => {
-
+        
     }
 
-    const handleBack = () => {
-
+    const handleSave = () => {
+        saveData(user);
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.headerWrapper}>
+                <Pressable
+                    style={styles.buttonEnabled}
+                    onPress={handleBack()}
+                />
                 <Image
                     style={styles.image}
                     source={require('../assets/little-lemon-logo.png')}
@@ -66,7 +92,7 @@ const Profile = ({ navigation }) => {
                 />
                 <Pressable
                     style={styles.buttonEnabled}
-                    onPress={onboard()}
+                    onPress={handleChangeImage()}
                 >
                     <Text style={styles.buttonText}>
                         Change
@@ -74,7 +100,7 @@ const Profile = ({ navigation }) => {
                 </Pressable>
                 <Pressable
                     style={styles.buttonEnabled}
-                    onPress={onboard()}
+                    onPress={handleRemoveImage()}
                 >
                     <Text style={styles.buttonText}>
                         Remove
@@ -141,10 +167,10 @@ const Profile = ({ navigation }) => {
             </Pressable>
             <Pressable
                 style={styles.buttonEnabled}
-                onPress={handleBack()}
+                onPress={handleSave()}
             >
                 <Text style={styles.buttonText}>
-                    Back
+                    Save changes
                 </Text>
             </Pressable>
             
