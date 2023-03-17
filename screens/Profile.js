@@ -158,7 +158,8 @@ const Profile = ({ navigation }) => {
                 </Text>
             </Pressable>
             <Pressable
-                style={styles.buttonEnabled}
+                style={styles.buttonDisabled}
+                disabled={true}
                 onPress={handleDiscard()}
             >
                 <Text style={styles.buttonText}>
