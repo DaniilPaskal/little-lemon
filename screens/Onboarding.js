@@ -24,6 +24,7 @@ const Onboarding = ({ navigation }) => {
 
     const onboard = () => {
         saveData(firstName, email);
+        state.isOnboardingComplete = true;
         navigation.navigate('Profile');
     }
 
