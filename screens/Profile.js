@@ -27,6 +27,18 @@ const Profile = ({ navigation }) => {
         setUser({ ...user, [name]: value });
     }
 
+    const handleLogout = () => {
+
+    }
+
+    const handleDiscard = () => {
+
+    }
+
+    const handleBack = () => {
+
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.headerWrapper}>
@@ -110,6 +122,31 @@ const Profile = ({ navigation }) => {
             <Text style={styles.regularText}>
                 Email notifications
             </Text>
+
+            <Pressable
+                style={styles.buttonEnabled}
+                onPress={handleLogout()}
+            >
+                <Text style={styles.buttonText}>
+                    Log out
+                </Text>
+            </Pressable>
+            <Pressable
+                style={styles.buttonEnabled}
+                onPress={handleDiscard()}
+            >
+                <Text style={styles.buttonText}>
+                    Discard changes
+                </Text>
+            </Pressable>
+            <Pressable
+                style={styles.buttonEnabled}
+                onPress={handleBack()}
+            >
+                <Text style={styles.buttonText}>
+                    Back
+                </Text>
+            </Pressable>
             
         </View>
     );
