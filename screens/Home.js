@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { validateEmail } from '../utils';
+import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../components/database';
 
 const API_URL = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json';
 
@@ -22,6 +23,54 @@ const Profile = ({ navigation }) => {
         
         return fetchedData;
     }
+
+    useEffect(() => {
+        (async () => {
+          try {
+            await createTable();
+            let menuItems = await getMenuItems();
+    
+            if (!menuItems.length) {
+              const menuItems = await fetchData();
+              saveMenuItems(menuItems);
+            }
+    
+            const sectionListData = getSectionListData(menuItems);
+            setData(sectionListData);
+          } catch (e) {
+            Alert.alert(e.message);
+          }
+        })();
+      }, []);
+    
+      useUpdateEffect(() => {
+        (async () => {
+          const activeCategories = sections.filter((s, i) => {
+            if (filterSelections.every((item) => item === false)) {
+              return true;
+            }
+            return filterSelections[i];
+          });
+          try {
+            const menuItems = await filterByQueryAndCategories(
+              query,
+              activeCategories
+            );
+            const sectionListData = getSectionListData(menuItems);
+            setData(sectionListData);
+          } catch (e) {
+            Alert.alert(e.message);
+          }
+        })();
+      }, [filterSelections, query]);
+    
+      const lookup = useCallback((q) => {
+        setQuery(q);
+      }, []);
+    
+      const debouncedLookup = useMemo(() => debounce(lookup, 500), [lookup]);
+    
+
 
     return (
         <View style={styles.container}>
