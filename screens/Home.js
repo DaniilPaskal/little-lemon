@@ -4,7 +4,24 @@ import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { validateEmail } from '../utils';
 
+const API_URL = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json';
+
 const Profile = ({ navigation }) => {
+
+    const fetchData = async() => {
+        var fetchedData = [];
+
+        try {
+        const response = await fetch(API_URL);
+        const json = await response.json();
+
+            fetchedData = json.menu.map((item) => ({id: item.id, title: item.title, price: item.price, category: item.category.title}));
+        } catch (error) {
+            console.error(error);
+        }
+        
+        return fetchedData;
+    }
 
     return (
         <View style={styles.container}>
