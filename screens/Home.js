@@ -70,7 +70,16 @@ const Profile = ({ navigation }) => {
     
       const debouncedLookup = useMemo(() => debounce(lookup, 500), [lookup]);
     
-
+      const handleSearchChange = (text) => {
+        setSearchBarText(text);
+        debouncedLookup(text);
+      };
+    
+      const handleFiltersChange = async (index) => {
+        const arrayCopy = [...filterSelections];
+        arrayCopy[index] = !filterSelections[index];
+        setFilterSelections(arrayCopy);
+      };
 
     return (
         <View style={styles.container}>
