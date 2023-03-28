@@ -7,6 +7,8 @@ import Profile from './screens/Profile';
 import Home from './screens/Home'
 import SplashScreen from './screens/SplashScreen';
 
+const Stack = createNativeStackNavigator();
+
 export default function App() {
   if (state.isLoading) {
     return (
