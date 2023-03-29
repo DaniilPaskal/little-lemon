@@ -32,7 +32,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {!user.name &&
           <Stack.Screen name='Onboarding' component={Onboarding} />
+        }
           <Stack.Screen name='Home' component={Home} />
           <Stack.Screen name='Profile' component={Profile} />
       </Stack.Navigator>
