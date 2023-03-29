@@ -12,6 +12,8 @@ const Onboarding = ({ navigation }) => {
     const validate = () => {
         if (firstName.length > 0 && validateEmail(email)) {
             setValid(true);
+        } else {
+            setValid(false);
         }
     }
 
