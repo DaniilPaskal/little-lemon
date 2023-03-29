@@ -9,6 +9,12 @@ const Onboarding = ({ navigation }) => {
     const [firstName, onChangeName] = useState('');
     const [valid, setValid] = useState(false);
 
+    const validate = () => {
+        if (firstName.length > 0 && validateEmail(email)) {
+            setValid(true);
+        }
+    }
+
     const saveData = async (firstName, email) => {
         const user = {
             firstName: {firstName},
@@ -46,20 +52,21 @@ const Onboarding = ({ navigation }) => {
                 style={styles.inputBox}
                 value={firstName}
                 onChangeText={onChangeName}
+                onBlur={validate}
                 placeholder={'Type your name'}
             />
                 <TextInput 
                 style={styles.inputBox}
                 value={email}
                 onChangeText={onChangeEmail}
-                onBlur={() => setValid(validateEmail(email))}
+                onBlur={validate}
                 placeholder={'Type your email'}
                 keyboardType={'email-address'}
             />
             <Pressable
                 style={valid ? styles.buttonEnabled : styles.buttonDisabled}
                 disabled={valid ? false : true}
-                onPress={onboard()}
+                onPress={onboard}
             >
                 <Text style={styles.buttonText}>
                 Next
