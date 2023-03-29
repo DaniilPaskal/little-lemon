@@ -142,7 +142,7 @@ const Profile = ({ navigation }) => {
                 value={user.phoneNumber}
                 onChangeText={handleChange}
                 onBlur={() => setValid(validateNumber(email))}
-                keyboardType={'phone-number'}
+                keyboardType={'phone-pad'}
             />
 
             <Text style={styles.regularText}>
