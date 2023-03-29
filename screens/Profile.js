@@ -7,6 +7,15 @@ import { validateEmail } from '../utils';
 const Profile = ({ navigation }) => {
     const [user, setUser] = useState({});
 
+    const saveData = async () => {
+        try {
+            const jsonValue = JSON.stringify(user);
+            await AsyncStorage.setItem('user', jsonValue);
+        } catch (e) {
+            console.error();
+        }
+    }
+
     useEffect(() => {
         (async () => {
             try {
@@ -21,15 +30,6 @@ const Profile = ({ navigation }) => {
             }
         })
     })
-
-    const saveData = async (user) => {
-        try {
-            const jsonValue = JSON.stringify(user);
-            await AsyncStorage.setItem('user', jsonValue);
-        } catch (e) {
-            console.error();
-        }
-    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -66,7 +66,7 @@ const Profile = ({ navigation }) => {
             <View style={styles.headerWrapper}>
                 <Pressable
                     style={styles.buttonEnabled}
-                    onPress={handleBack()}
+                    onPress={handleBack}
                 />
                 <Image
                     style={styles.image}
@@ -92,7 +92,7 @@ const Profile = ({ navigation }) => {
                 />
                 <Pressable
                     style={styles.buttonEnabled}
-                    onPress={handleChangeImage()}
+                    onPress={handleChangeImage}
                 >
                     <Text style={styles.buttonText}>
                         Change
@@ -100,7 +100,7 @@ const Profile = ({ navigation }) => {
                 </Pressable>
                 <Pressable
                     style={styles.buttonEnabled}
-                    onPress={handleRemoveImage()}
+                    onPress={handleRemoveImage}
                 >
                     <Text style={styles.buttonText}>
                         Remove
@@ -151,7 +151,7 @@ const Profile = ({ navigation }) => {
 
             <Pressable
                 style={styles.buttonEnabled}
-                onPress={handleLogout()}
+                onPress={handleLogout}
             >
                 <Text style={styles.buttonText}>
                     Log out
@@ -160,7 +160,7 @@ const Profile = ({ navigation }) => {
             <Pressable
                 style={styles.buttonDisabled}
                 disabled={true}
-                onPress={handleDiscard()}
+                onPress={handleDiscard}
             >
                 <Text style={styles.buttonText}>
                     Discard changes
@@ -168,7 +168,7 @@ const Profile = ({ navigation }) => {
             </Pressable>
             <Pressable
                 style={styles.buttonEnabled}
-                onPress={handleSave()}
+                onPress={handleSave}
             >
                 <Text style={styles.buttonText}>
                     Save changes
