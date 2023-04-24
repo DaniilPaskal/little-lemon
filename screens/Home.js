@@ -1,101 +1,135 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
+import { useState, useEffect, useUpdateEffect, useCallback } from 'react';
+import { View, Image, Text, Pressable, StyleSheet, SectionList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { validateEmail } from '../utils';
 import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../components/database';
+import { SearchBar } from 'react-native-screens';
+import { validateEmail } from '../utils';
+import Filters from '../components/Filters';
 
 const API_URL = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json';
 
-const Profile = ({ navigation }) => {
+const Home = ({ navigation }) => {
+  const sections = ['starters', 'mains', 'desserts'];
+  const [filterSelections, setFilterSelections] = useState(sections.map(() => false));
+  const [query, setQuery] = useState('');
+  const [data, setData] = useState([]);
+  const [searchBarText, setSearchBarText] = useState('');
 
-    const fetchData = async() => {
-        var fetchedData = [];
+  const fetchData = async() => {
+  var fetchedData = [];
 
-        try {
-        const response = await fetch(API_URL);
-        const json = await response.json();
-
-            fetchedData = json.menu.map((item) => ({id: item.id, title: item.title, price: item.price, category: item.category.title}));
-        } catch (error) {
-            console.error(error);
-        }
-        
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const json = await response.json();
+      fetchedData = json.menu.map((item) => ({id: item.id, title: item.title, price: item.price, category: item.category.title}));
+      } catch (error) {
+          console.error(error);
+      } finally {
         return fetchedData;
+      }
     }
+  }
 
-    useEffect(() => {
-        (async () => {
-          try {
-            await createTable();
-            let menuItems = await getMenuItems();
-    
-            if (!menuItems.length) {
-              const menuItems = await fetchData();
-              saveMenuItems(menuItems);
-            }
-    
-            const sectionListData = getSectionListData(menuItems);
-            setData(sectionListData);
-          } catch (e) {
-            Alert.alert(e.message);
+  useEffect(() => {
+      (async () => {
+        try {
+          await createTable();
+          let menuItems = await getMenuItems();
+  
+          if (!menuItems.length) {
+            const menuItems = await fetchData();
+            saveMenuItems(menuItems);
           }
-        })();
-      }, []);
-    
-      useUpdateEffect(() => {
-        (async () => {
-          const activeCategories = sections.filter((s, i) => {
-            if (filterSelections.every((item) => item === false)) {
-              return true;
-            }
-            return filterSelections[i];
-          });
-          try {
-            const menuItems = await filterByQueryAndCategories(
-              query,
-              activeCategories
-            );
-            const sectionListData = getSectionListData(menuItems);
-            setData(sectionListData);
-          } catch (e) {
-            Alert.alert(e.message);
+  
+          const sectionListData = getSectionListData(menuItems);
+          setData(sectionListData);
+        } catch (e) {
+          Alert.alert(e.message);
+        }
+      })();
+    }, []);
+  
+    useUpdateEffect(() => {
+      (async () => {
+        const activeCategories = sections.filter((s, i) => {
+          if (filterSelections.every((item) => item === false)) {
+            return true;
           }
-        })();
-      }, [filterSelections, query]);
-    
-      const lookup = useCallback((q) => {
-        setQuery(q);
-      }, []);
-    
-      const debouncedLookup = useMemo(() => debounce(lookup, 500), [lookup]);
-    
-      const handleSearchChange = (text) => {
-        setSearchBarText(text);
-        debouncedLookup(text);
-      };
-    
-      const handleFiltersChange = async (index) => {
-        const arrayCopy = [...filterSelections];
-        arrayCopy[index] = !filterSelections[index];
-        setFilterSelections(arrayCopy);
-      };
+          return filterSelections[i];
+        });
+        try {
+          const menuItems = await filterByQueryAndCategories(
+            query,
+            activeCategories
+          );
+          const sectionListData = getSectionListData(menuItems);
+          setData(sectionListData);
+        } catch (e) {
+          Alert.alert(e.message);
+        }
+      })();
+    }, [filterSelections, query]);
+  
+    const lookup = useCallback((q) => {
+      setQuery(q);
+    }, []);
+  
+    const debouncedLookup = useMemo(() => debounce(lookup, 500), [lookup]);
+  
+    const handleSearchChange = (text) => {
+      setSearchBarText(text);
+      debouncedLookup(text);
+    };
+  
+    const handleFiltersChange = async (index) => {
+      const arrayCopy = [...filterSelections];
+      arrayCopy[index] = !filterSelections[index];
+      setFilterSelections(arrayCopy);
+    };
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.headerWrapper}>
-                <Image
-                    style={styles.image}
-                    source={require('../assets/little-lemon-logo.png')}
-                    resizeMode='contain'
-                    accessible={true}
-                    accessibilityLabel={'Little Lemon Logo'}
-                />
-            </View>
-           
-            
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <View style={styles.headerWrapper}>
+          <Image
+              style={styles.image}
+              source={require('../assets/little-lemon-logo.png')}
+              resizeMode='contain'
+              accessible={true}
+              accessibilityLabel={'Little Lemon Logo'}
+          />
+          <Pressable
+           onPress={() => navigation.navigate('Profile')}
+          />
+      </View>
+      
+      <View>
+        <SearchBar 
+          placeholder='Search'
+          onChangeText={handleSearchChange}
+          value={searchBarText}
+        />
+      </View>
+      <Filters
+        selections={filterSelections}
+        onChange={handleFiltersChange}
+        sections={sections}
+      />
+      <SectionList
+        sections={data}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => {
+          <View>
+            <Text>{item.name}</Text>
+            <Text>{item.description}</Text>
+            <Text>{item.price}</Text>
+            <Image source={{uri: `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${item.image}?raw=true`}} />
+          </View>
+        }}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -151,4 +185,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Profile;
+export default Home;
