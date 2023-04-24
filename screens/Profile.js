@@ -5,7 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { validateEmail } from '../utils';
 
 const Profile = ({ navigation }) => {
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+    });
 
     const saveData = async () => {
         try {
@@ -19,25 +24,21 @@ const Profile = ({ navigation }) => {
     useEffect(() => {
         (async () => {
             try {
-                const values = await AsyncStorage.multiGet(Object.keys(user));
-                const user = values.reduce((acc, curr) => {
-                    acc[curr[0]] = JSON.parse(curr[1]);
-                    return acc;
-                }, {});
-                setUser(user);
+                const getUser = await AsyncStorage.getItem('user');
+                setUser(JSON.parse(getUser));
+
+                console.log('1')
+                console.log(user);
             } catch (e) {
                 console.error();
             }
-        })
-    })
+        })();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
-    }
-
-    const handleBack = () => {
-        navigation.navigate('Home');
+        console.log(user);
     }
 
     const handleChangeImage = () => {
@@ -62,12 +63,8 @@ const Profile = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} behavior={'height'}>
             <View style={styles.headerWrapper}>
-                <Pressable
-                    style={styles.buttonEnabled}
-                    onPress={handleBack}
-                />
                 <Image
                     style={styles.image}
                     source={require('../assets/little-lemon-logo.png')}
@@ -76,105 +73,106 @@ const Profile = ({ navigation }) => {
                     accessibilityLabel={'Little Lemon Logo'}
                 />
             </View>
-            <Text style={styles.regularText}>
-                Personal information
-            </Text>
-            <View style={styles.headerWrapper}>
+            <ScrollView>
                 <Text style={styles.regularText}>
-                    Avatar
+                    Personal information
                 </Text>
-                <Image
-                    style={styles.image}
-                    source={require('../assets/little-lemon-logo.png')}
-                    resizeMode='contain'
-                    accessible={true}
-                    accessibilityLabel={'User profile image'}
+                <View style={styles.headerWrapper}>
+                    <Text style={styles.regularText}>
+                        Avatar
+                    </Text>
+                    <Image
+                        style={styles.image}
+                        source={require('../assets/little-lemon-logo.png')}
+                        resizeMode='contain'
+                        accessible={true}
+                        accessibilityLabel={'User profile image'}
+                    />
+                    <Pressable
+                        style={styles.buttonEnabled}
+                        onPress={handleChangeImage}
+                    >
+                        <Text style={styles.buttonText}>
+                            Change
+                        </Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.buttonEnabled}
+                        onPress={handleRemoveImage}
+                    >
+                        <Text style={styles.buttonText}>
+                            Remove
+                        </Text>
+                    </Pressable>
+                </View>
+
+                <Text style={styles.regularText}>
+                    First name
+                </Text>
+                <TextInput 
+                    style={styles.inputBox}
+                    value={user.firstName}
+                    onChangeText={handleChange}
                 />
+                <Text style={styles.regularText}>
+                    Last name
+                </Text>
+                <TextInput 
+                    style={styles.inputBox}
+                    value={user.lastName}
+                    onChangeText={handleChange}
+                />
+                <Text style={styles.regularText}>
+                    Email
+                </Text>
+                <TextInput 
+                    style={styles.inputBox}
+                    value={user.email}
+                    onChangeText={handleChange}
+                    onBlur={() => setValid(validateEmail(email))}
+                    keyboardType={'email-address'}
+                />
+                <Text style={styles.regularText}>
+                    Phone number
+                </Text>
+                <TextInput 
+                    style={styles.inputBox}
+                    value={user.phoneNumber}
+                    onChangeText={handleChange}
+                    onBlur={() => setValid(validateNumber(email))}
+                    keyboardType={'phone-pad'}
+                />
+
+                <Text style={styles.regularText}>
+                    Email notifications
+                </Text>
+
                 <Pressable
                     style={styles.buttonEnabled}
-                    onPress={handleChangeImage}
+                    onPress={handleLogout}
                 >
                     <Text style={styles.buttonText}>
-                        Change
+                        Log out
+                    </Text>
+                </Pressable>
+                <Pressable
+                    style={styles.buttonDisabled}
+                    disabled={true}
+                    onPress={handleDiscard}
+                >
+                    <Text style={styles.buttonText}>
+                        Discard changes
                     </Text>
                 </Pressable>
                 <Pressable
                     style={styles.buttonEnabled}
-                    onPress={handleRemoveImage}
+                    onPress={handleSave}
                 >
                     <Text style={styles.buttonText}>
-                        Remove
+                        Save changes
                     </Text>
                 </Pressable>
-            </View>
-
-            <Text style={styles.regularText}>
-                First name
-            </Text>
-            <TextInput 
-                style={styles.inputBox}
-                value={user.firstName}
-                onChangeText={handleChange}
-            />
-            <Text style={styles.regularText}>
-                Last name
-            </Text>
-            <TextInput 
-                style={styles.inputBox}
-                value={user.lastName}
-                onChangeText={handleChange}
-            />
-            <Text style={styles.regularText}>
-                Email
-            </Text>
-            <TextInput 
-                style={styles.inputBox}
-                value={user.email}
-                onChangeText={handleChange}
-                onBlur={() => setValid(validateEmail(email))}
-                keyboardType={'email-address'}
-            />
-            <Text style={styles.regularText}>
-                Phone number
-            </Text>
-            <TextInput 
-                style={styles.inputBox}
-                value={user.phoneNumber}
-                onChangeText={handleChange}
-                onBlur={() => setValid(validateNumber(email))}
-                keyboardType={'phone-pad'}
-            />
-
-            <Text style={styles.regularText}>
-                Email notifications
-            </Text>
-
-            <Pressable
-                style={styles.buttonEnabled}
-                onPress={handleLogout}
-            >
-                <Text style={styles.buttonText}>
-                    Log out
-                </Text>
-            </Pressable>
-            <Pressable
-                style={styles.buttonDisabled}
-                disabled={true}
-                onPress={handleDiscard}
-            >
-                <Text style={styles.buttonText}>
-                    Discard changes
-                </Text>
-            </Pressable>
-            <Pressable
-                style={styles.buttonEnabled}
-                onPress={handleSave}
-            >
-                <Text style={styles.buttonText}>
-                    Save changes
-                </Text>
-            </Pressable>
-            
+            </ScrollView>
         </View>
     );
 }
