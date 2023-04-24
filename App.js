@@ -14,20 +14,16 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [user, setUser] = useState({});
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const values = await AsyncStorage.multiGet(Object.keys(user));
-                const user = values.reduce((acc, curr) => {
-                    acc[curr[0]] = JSON.parse(curr[1]);
-                    return acc;
-                }, {});
-                setUser(user);
-            } catch (e) {
-                console.error();
-            }
-        })
-    })
+  useEffect(() => {
+    (async () => {
+        try {
+            const getUser = await AsyncStorage.getItem('user');
+            setUser(JSON.parse(getUser));
+        } catch (e) {
+            console.error();
+        }
+    })();
+}, []);
 
   return (
     <NavigationContainer>
