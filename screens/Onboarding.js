@@ -23,6 +23,8 @@ const Onboarding = ({ navigation }) => {
             email: {email},
         }
 
+        console.log(user);
+
         try {
             const jsonValue = JSON.stringify(user);
             await AsyncStorage.setItem('user', jsonValue);
