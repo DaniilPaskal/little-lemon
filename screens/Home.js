@@ -16,78 +16,80 @@ const Home = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [searchBarText, setSearchBarText] = useState('');
 
-  const fetchData = async() => {
-  var fetchedData = [];
-
   const fetchData = async () => {
+    var fetchedData = [];
+
     try {
       const response = await fetch(API_URL);
       const json = await response.json();
-      fetchedData = json.menu.map((item) => ({id: item.id, title: item.title, price: item.price, category: item.category.title}));
-      } catch (error) {
-          console.error(error);
-      } finally {
-        return fetchedData;
-      }
+      fetchedData = json.menu.map((item, index) => ({
+        id: index + 1, 
+        title: item.title, 
+        price: item.price, 
+        description: item.description,
+        image: item.image,
+        category: item.category
+      }));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      return fetchedData;
     }
-  }
+  };
 
   useEffect(() => {
-      (async () => {
-        try {
-          await createTable();
-          let menuItems = await getMenuItems();
-  
-          if (!menuItems.length) {
-            const menuItems = await fetchData();
-            saveMenuItems(menuItems);
-          }
-  
-          const sectionListData = getSectionListData(menuItems);
-          setData(sectionListData);
-        } catch (e) {
-          Alert.alert(e.message);
+    (async () => {
+      try {
+        await createTable();
+        var menuItems = await getMenuItems();
+
+        if (!menuItems.length) {
+          const menuItems = await fetchData();
+          saveMenuItems(menuItems);
         }
-      })();
-    }, []);
+
+        const sectionListData = getSectionListData(menuItems);
+        setData(sectionListData);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, []);
   
-    useUpdateEffect(() => {
-      (async () => {
-        const activeCategories = sections.filter((s, i) => {
-          if (filterSelections.every((item) => item === false)) {
-            return true;
-          }
-          return filterSelections[i];
-        });
-        try {
-          const menuItems = await filterByQueryAndCategories(
-            query,
-            activeCategories
-          );
-          const sectionListData = getSectionListData(menuItems);
-          setData(sectionListData);
-        } catch (e) {
-          Alert.alert(e.message);
+  useUpdateEffect(() => {
+    (async () => {
+      const activeCategories = sections.filter((s, i) => {
+        if (filterSelections.every((item) => item === false)) {
+          return true;
         }
-      })();
-    }, [filterSelections, query]);
-  
-    const lookup = useCallback((q) => {
-      setQuery(q);
-    }, []);
-  
-    const debouncedLookup = useMemo(() => debounce(lookup, 500), [lookup]);
-  
-    const handleSearchChange = (text) => {
-      setSearchBarText(text);
-      debouncedLookup(text);
-    };
-  
-    const handleFiltersChange = async (index) => {
-      const arrayCopy = [...filterSelections];
-      arrayCopy[index] = !filterSelections[index];
-      setFilterSelections(arrayCopy);
-    };
+        return filterSelections[i];
+      });
+      try {
+        const menuItems = await filterByQueryAndCategories(query, activeCategories);
+        const sectionListData = getSectionListData(menuItems);
+        setData(sectionListData);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [filterSelections, query]);
+
+  const lookup = useCallback((q) => {
+    setQuery(q);
+  }, []);
+
+  const debouncedLookup = useMemo(() => debounce(lookup, 500), [lookup]);
+
+  const handleSearchChange = (text) => {
+    setSearchBarText(text);
+    debouncedLookup(text);
+  };
+
+  const handleFiltersChange = async (index) => {
+    const arrayCopy = [...filterSelections];
+    arrayCopy[index] = !filterSelections[index];
+    setFilterSelections(arrayCopy);
+  };
 
   return (
     <View style={styles.container}>
