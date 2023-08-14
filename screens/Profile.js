@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { View, Image, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, Image, Text, TextInput, Pressable, StyleSheet, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { validateEmail } from '../utils';
 
