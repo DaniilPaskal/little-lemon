@@ -4,11 +4,10 @@ const db = SQLite.openDatabase('little_lemon');
 
 export async function createTable() {
   return new Promise((resolve, reject) => {
-    db.transaction(
-      (tx) => {
-        tx.executeSql(
-          'create table if not exists menuitems (id integer primary key not null, uuid text, title text, price text, category text);'
-        );
+    db.transaction((tx) => {
+      tx.executeSql(
+        'create table if not exists menuitems (id integer primary key not null, name text, price text, description text, image text, category text);'
+      );
       },
       reject,
       resolve
@@ -28,21 +27,18 @@ export async function getMenuItems() {
 
 export function saveMenuItems(menuItems) {
   db.transaction((tx) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        `insert into menuItems (uuid, title, price, category) values ${menuItems
-          .map((item) => 
-            `('${item.id}', '${item.title}', '${item.price}', '${item.category}')`)
-                .join(', ')}`
-      )
-    })
+    tx.executeSql(
+      `insert into menuitems (id, name, price, description, image, category) values ${menuItems.map((item) =>
+        `('${item.id}', '${item.name}', '${item.price}', '${item.description}', '${item.image}', '${item.category}')`)
+          .join(', ')}`
+    );
   });
 }
 
 export async function filterByQueryAndCategories(query, activeCategories) {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      tx.executeSql('select * from menuItems where title like ? and category in (?, ?, ?)', [`%${query}%`, ...activeCategories], (_, { rows }) => {
+      tx.executeSql('select * from menuitems where name like ? and category in (?, ?, ?)', [`%${query}%`, ...activeCategories], (_, { rows }) => {
         resolve(rows._array);
       });
     });
