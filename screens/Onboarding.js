@@ -1,41 +1,27 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { View, Image, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { validateEmail } from '../utils';
+import { validateEmail } from '../utils/utils';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Onboarding = ({ navigation }) => {
     const [email, onChangeEmail] = useState('');
-    const [firstName, onChangeName] = useState('');
+    const [firstName, onChangeFirstName] = useState('');
+    const [lastName, onChangeLastName] = useState('');
     const [valid, setValid] = useState(false);
+    const { logIn } = useContext(AuthContext);
 
     const validate = () => {
-        if (firstName.length > 0 && validateEmail(email)) {
+        if (firstName.length > 0 && lastName.length > 0 && validateEmail(email)) {
             setValid(true);
         } else {
             setValid(false);
         }
     }
 
-    const saveData = async (firstName, email) => {
-        const user = {
-            firstName: {firstName},
-            email: {email},
-        }
-
-        console.log(user);
-
-        try {
-            const jsonValue = JSON.stringify(user);
-            await AsyncStorage.setItem('user', jsonValue);
-        } catch (e) {
-            console.error();
-        }
-    }
-
     const onboard = () => {
-        saveData(firstName, email);
-        navigation.navigate('Profile');
+        logIn({ firstName, lastName, email })
     }
 
     return (
@@ -55,16 +41,23 @@ const Onboarding = ({ navigation }) => {
             <TextInput 
                 style={styles.inputBox}
                 value={firstName}
-                onChangeText={onChangeName}
+                onChangeText={onChangeFirstName}
                 onBlur={validate}
-                placeholder={'Type your name'}
+                placeholder={'First name'}
             />
-                <TextInput 
+            <TextInput 
+                style={styles.inputBox}
+                value={lastName}
+                onChangeText={onChangeLastName}
+                onBlur={validate}
+                placeholder={'Last name'}
+            />
+            <TextInput 
                 style={styles.inputBox}
                 value={email}
                 onChangeText={onChangeEmail}
                 onBlur={validate}
-                placeholder={'Type your email'}
+                placeholder={'Email address'}
                 keyboardType={'email-address'}
             />
             <Pressable
@@ -72,9 +65,7 @@ const Onboarding = ({ navigation }) => {
                 disabled={valid ? false : true}
                 onPress={onboard}
             >
-                <Text style={styles.buttonText}>
-                Next
-                </Text>
+                <Text style={styles.buttonText}>Next</Text>
             </Pressable>
         </View>
     );
