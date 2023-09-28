@@ -2,11 +2,15 @@ import * as React from 'react';
 import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
 
 const SplashScreen = ({ navigation }) => {
-    
-
     return (
     <View style={styles.container}>
-        
+        <Image 
+            style={styles.image} 
+            source={require("../assets/little-lemon-logo.png")}
+            resizeMode='contain'
+            accessible={true}
+            accessibilityLabel={'Little Lemon Logo'}
+        />
     </View>
     );
 }
