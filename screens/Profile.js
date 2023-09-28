@@ -1,65 +1,83 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { View, Image, Text, TextInput, Pressable, StyleSheet, ScrollView } from 'react-native';
+import { useState, useEffect, useContext } from 'react';
+import { View, Image, Text, TextInput, Pressable, StyleSheet, ScrollView, Platform, ToastAndroid, AlertIOS } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { validateEmail } from '../utils';
+import * as ImagePicker from 'expo-image-picker';
+import Checkbox from "expo-checkbox";
+import { validateEmail } from '../utils/utils';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Profile = ({ navigation }) => {
     const [user, setUser] = useState({
         firstName: '',
         lastName: '',
         email: '',
+        image: '',
         phoneNumber: '',
+        notifications: false
     });
+    const [valid, setValid] = useState(true);
+    const { logOut } = useContext(AuthContext);
+    const { update } = useContext(AuthContext);
 
-    const saveData = async () => {
+    const loadUser = async () => {
         try {
-            const jsonValue = JSON.stringify(user);
-            await AsyncStorage.setItem('user', jsonValue);
+            const getUser = await AsyncStorage.getItem('user');
+            setUser(JSON.parse(getUser));
         } catch (e) {
             console.error();
         }
-    }
+    };
 
     useEffect(() => {
-        (async () => {
-            try {
-                const getUser = await AsyncStorage.getItem('user');
-                setUser(JSON.parse(getUser));
-
-                console.log('1')
-                console.log(user);
-            } catch (e) {
-                console.error();
-            }
-        })();
+        loadUser();
     }, []);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const validate = () => {
+        if (user.firstName.length > 0 && user.lastName.length > 0 && validateEmail(user.email)) {
+            setValid(true);
+        } else {
+            setValid(false);
+        }
+    }
+
+    const notify = (message) => {
+        if (Platform.OS === 'android') {
+            ToastAndroid.show(message, ToastAndroid.SHORT);
+        } else {
+            AlertIOS.alert(message);
+        }
+    }
+
+    const handleChange = (name, value) => {
         setUser({ ...user, [name]: value });
-        console.log(user);
-    }
+    };
 
-    const handleChangeImage = () => {
+    const handleChangeImage = async () => {
+        var newImage = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true
+        });
 
-    }
+        setUser({ ...user, image: newImage.assets[0].uri});
+    };
 
     const handleRemoveImage = () => {
-
-    }
+        setUser({ ...user, image: ''});
+    };
 
     const handleLogout = () => {
         AsyncStorage.clear();
-        navigation.navigate('Onboarding');
-    }
+    };
 
     const handleDiscard = () => {
-        
-    }
+        loadUser();  
+        notify('Changes discarded.');
+    };
 
     const handleSave = () => {
-        saveData(user);
+        update(user);
+        notify('Changes saved!');
     }
 
     return (
@@ -77,17 +95,20 @@ const Profile = ({ navigation }) => {
                 <Text style={styles.regularText}>
                     Personal information
                 </Text>
-                <View style={styles.headerWrapper}>
-                    <Text style={styles.regularText}>
+                <Text style={styles.regularText}>
                         Avatar
-                    </Text>
-                    <Image
-                        style={styles.image}
-                        source={require('../assets/little-lemon-logo.png')}
-                        resizeMode='contain'
-                        accessible={true}
-                        accessibilityLabel={'User profile image'}
-                    />
+                </Text>
+                <View style={styles.headerWrapper}>
+                    {user.image ? (
+                        <Image style={styles.avatar} source={{ uri: user.image }} />
+                    ) : (
+                        <View style={styles.emptyAvatar}>
+                            <Text style={styles.emptyAvatarText}>
+                                {user.firstName && user.firstName.charAt(0).toUpperCase()}
+                                {user.firstName && user.lastName.charAt(0).toUpperCase()}
+                            </Text>
+                        </View>
+                    )}
                     <Pressable
                         style={styles.buttonEnabled}
                         onPress={handleChangeImage}
@@ -112,7 +133,8 @@ const Profile = ({ navigation }) => {
                 <TextInput 
                     style={styles.inputBox}
                     value={user.firstName}
-                    onChangeText={handleChange}
+                    onChangeText={(newValue) => handleChange('firstName', newValue)}
+                    onBlur={validate}
                 />
                 <Text style={styles.regularText}>
                     Last name
@@ -120,7 +142,8 @@ const Profile = ({ navigation }) => {
                 <TextInput 
                     style={styles.inputBox}
                     value={user.lastName}
-                    onChangeText={handleChange}
+                    onChangeText={(newValue) => handleChange('lastName', newValue)}
+                    onBlur={validate}
                 />
                 <Text style={styles.regularText}>
                     Email
@@ -128,8 +151,8 @@ const Profile = ({ navigation }) => {
                 <TextInput 
                     style={styles.inputBox}
                     value={user.email}
-                    onChangeText={handleChange}
-                    onBlur={() => setValid(validateEmail(email))}
+                    onChangeText={(newValue) => handleChange('email', newValue)}
+                    onBlur={validate}
                     keyboardType={'email-address'}
                 />
                 <Text style={styles.regularText}>
@@ -138,14 +161,19 @@ const Profile = ({ navigation }) => {
                 <TextInput 
                     style={styles.inputBox}
                     value={user.phoneNumber}
-                    onChangeText={handleChange}
+                    onChangeText={(newValue) => handleChange('phoneNumber', newValue)}
                     onBlur={() => setValid(validateNumber(email))}
                     keyboardType={'phone-pad'}
                 />
 
-                <Text style={styles.regularText}>
+                {/* <Text style={styles.regularText}>
                     Email notifications
                 </Text>
+                <Checkbox
+                    style={styles.checkbox}
+                    value={user.notifications}
+                    
+                /> */}
 
                 <Pressable
                     style={styles.buttonEnabled}
@@ -156,8 +184,8 @@ const Profile = ({ navigation }) => {
                     </Text>
                 </Pressable>
                 <Pressable
-                    style={styles.buttonDisabled}
-                    disabled={true}
+                    style={styles.buttonEnabled}
+                    disabled={false}
                     onPress={handleDiscard}
                 >
                     <Text style={styles.buttonText}>
@@ -165,7 +193,8 @@ const Profile = ({ navigation }) => {
                     </Text>
                 </Pressable>
                 <Pressable
-                    style={styles.buttonEnabled}
+                    style={valid ? styles.buttonEnabled : styles.buttonDisabled}
+                    disabled={valid ? false : true}
                     onPress={handleSave}
                 >
                     <Text style={styles.buttonText}>
@@ -180,23 +209,72 @@ const Profile = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#FFF',
     },
     headerWrapper: {
         flexDirection: 'row',
         justifyContent: 'center',
-        margin: 10,
+    },
+    sectionList: {
+        paddingHorizontal: 16,
+    },
+    searchBar: {
+        marginBottom: 24,
+        backgroundColor: '#495E57',
+        shadowRadius: 0,
+        shadowOpacity: 0,
+    },
+    itemHeader: {
+        fontSize: 24,
+        paddingVertical: 8,
+        color: '#FBDABB',
+        backgroundColor: '#495E57',
+    },
+    item: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 16,
+    },
+    itemInfo: {
+        flex: 1,
+    }, 
+    title: {
+        fontSize: 20,
+        color: 'white',
     },
     image: {
-        width: 150,
+        width: 50,
         height: 150,
+    },
+    avatarContainer: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+    },
+    avatar: {
+        width: 75,
+        height: 75,
+        borderRadius: 50,
+    },
+    emptyAvatar: {
+        width: 75,
+        height: 75,
+        borderRadius: 50,
+        backgroundColor: '#495E57',
+    },
+    emptyAvatarText: {
+        fontSize: 32,
+        color: '#FFF',
+        textAlign: 'center',
+        marginTop: 12
     },
     regularText: {
         fontSize: 18,
         fontWeight: 'bold',
-        padding: 50,
-        marginVertical: 8,
         textAlign: 'center',
         color: 'black',
+        marginVertical: 8
     },
     inputBox: {
         height: 40,
