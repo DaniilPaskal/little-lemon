@@ -6,22 +6,29 @@ import { validateEmail } from '../utils/utils';
 import { AuthContext } from '../contexts/AuthContext';
 
 const Onboarding = ({ navigation }) => {
-    const [email, onChangeEmail] = useState('');
-    const [firstName, onChangeFirstName] = useState('');
-    const [lastName, onChangeLastName] = useState('');
+    const [user, setUser] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+    });
     const [valid, setValid] = useState(false);
     const { logIn } = useContext(AuthContext);
 
     const validate = () => {
-        if (firstName.length > 0 && lastName.length > 0 && validateEmail(email)) {
+        if (user.firstName.length > 0 && user.lastName.length > 0 && validateEmail(user.email)) {
             setValid(true);
         } else {
             setValid(false);
         }
     }
 
+    const handleChange = (name, value) => {
+        setUser({ ...user, [name]: value });
+        console.log(user)
+    };
+
     const onboard = () => {
-        logIn({ firstName, lastName, email })
+        logIn({ ...user });
     }
 
     return (
@@ -40,25 +47,25 @@ const Onboarding = ({ navigation }) => {
             </Text>
             <TextInput 
                 style={styles.inputBox}
-                value={firstName}
-                onChangeText={onChangeFirstName}
-                onBlur={validate}
+                value={user.firstName}
+                onChangeText={(newValue) => handleChange('firstName', newValue)}
                 placeholder={'First name'}
+                onBlur={validate}
             />
             <TextInput 
                 style={styles.inputBox}
-                value={lastName}
-                onChangeText={onChangeLastName}
-                onBlur={validate}
+                value={user.lastName}
+                onChangeText={(newValue) => handleChange('lastName', newValue)}
                 placeholder={'Last name'}
+                onBlur={validate}
             />
             <TextInput 
                 style={styles.inputBox}
-                value={email}
-                onChangeText={onChangeEmail}
-                onBlur={validate}
+                value={user.email}
+                onChangeText={(newValue) => handleChange('email', newValue)}
                 placeholder={'Email address'}
                 keyboardType={'email-address'}
+                onBlur={validate}
             />
             <Pressable
                 style={valid ? styles.buttonEnabled : styles.buttonDisabled}
