@@ -43,7 +43,7 @@ export default function App() {
       } catch (e) {
           console.error(e);
       } finally {
-        if (Object.keys(profile).length > 0) {
+        if (profile) {
           dispatch({ type: 'LOG_IN', isLoggedIn: true });
         } else {
           dispatch({ type: 'LOG_IN', isLoggedIn: false });
