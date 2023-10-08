@@ -24,7 +24,6 @@ const Onboarding = ({ navigation }) => {
 
     const handleChange = (name, value) => {
         setUser({ ...user, [name]: value });
-        console.log(user)
     };
 
     const onboard = () => {
