@@ -67,7 +67,7 @@ const Profile = ({ navigation }) => {
     };
 
     const handleLogout = () => {
-        AsyncStorage.clear();
+        logOut();
     };
 
     const handleDiscard = () => {
