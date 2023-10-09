@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import { View, Image, Text, TextInput, Pressable, StyleSheet, ScrollView, Platform, ToastAndroid, AlertIOS } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
-import Checkbox from "expo-checkbox";
+import Checkbox from 'expo-checkbox';
 import { validateEmail } from '../utils/utils';
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -166,14 +166,14 @@ const Profile = ({ navigation }) => {
                     keyboardType={'phone-pad'}
                 />
 
-                {/* <Text style={styles.regularText}>
+                <Text style={styles.regularText}>
                     Email notifications
                 </Text>
                 <Checkbox
                     style={styles.checkbox}
                     value={user.notifications}
-                    
-                /> */}
+                    onValueChange={(newValue) => handleChange('notifications', newValue)}
+                />
 
                 <Pressable
                     style={styles.buttonEnabled}
