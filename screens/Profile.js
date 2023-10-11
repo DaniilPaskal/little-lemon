@@ -17,6 +17,7 @@ const Profile = ({ navigation }) => {
         notifications: false
     });
     const [valid, setValid] = useState(true);
+    const [changed, setChanged] = useState(false);
     const { logOut } = useContext(AuthContext);
     const { update } = useContext(AuthContext);
 
@@ -51,6 +52,7 @@ const Profile = ({ navigation }) => {
 
     const handleChange = (name, value) => {
         setUser({ ...user, [name]: value });
+        setChanged(true);
     };
 
     const handleChangeImage = async () => {
@@ -72,11 +74,13 @@ const Profile = ({ navigation }) => {
 
     const handleDiscard = () => {
         loadUser();  
+        setChanged(false);
         notify('Changes discarded.');
     };
 
     const handleSave = () => {
         update(user);
+        setChanged(false);
         notify('Changes saved!');
     }
 
@@ -184,8 +188,8 @@ const Profile = ({ navigation }) => {
                     </Text>
                 </Pressable>
                 <Pressable
-                    style={styles.buttonEnabled}
-                    disabled={false}
+                    style={changed ? styles.buttonEnabled : styles.buttonDisabled}
+                    disabled={changed ? false : true}
                     onPress={handleDiscard}
                 >
                     <Text style={styles.buttonText}>
