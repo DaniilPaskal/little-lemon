@@ -289,6 +289,9 @@ const styles = StyleSheet.create({
         borderColor: '#EDEFEE',
         backgroundColor: '#EDEFEE',
     },
+    checkbox: {
+        alignSelf: 'center',
+    },
     buttonEnabled: {
         fontSize: 22,
         padding: 10,
