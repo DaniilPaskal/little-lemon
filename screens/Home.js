@@ -157,9 +157,9 @@ const Home = ({ navigation }) => {
         style={styles.sectionList}
         sections={data}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
+        renderItem={({ item }) => (
           <Item name={item.name} price={item.price} description={item.description} image={item.image} />
-        }}
+        )}
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.header}>{title}</Text>
         )}
