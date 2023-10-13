@@ -13,9 +13,9 @@ const API_URL = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Work
 const Item = ({ name, price, description, image }) => (
   <View style={styles.item}>
     <View style={styles.itemInfo}>
-      <Text style={styles.itemText}>{name}</Text>
-      <Text>{description}</Text>
-      <Text>${price}</Text>
+      <Text style={styles.itemName}>{name}</Text>
+      <Text style={styles.itemDesc}>{description}</Text>
+      <Text style={styles.itemPrice}>${price}</Text>
     </View>
     <Image style={styles.itemImage} source={{uri: `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${image}?raw=true`}} />
   </View>
@@ -57,7 +57,7 @@ const Home = ({ navigation }) => {
         var menuItems = await getMenuItems();
 
         if (menuItems.length === 0) {
-          const menuItems = await fetchData();
+          menuItems = await fetchData();
           saveMenuItems(menuItems);
         }
 
@@ -161,7 +161,7 @@ const Home = ({ navigation }) => {
           <Item name={item.name} price={item.price} description={item.description} image={item.image} />
         )}
         renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.header}>{title}</Text>
+          <Text style={styles.sectionHeader}>{title}</Text>
         )}
       />
     </View>
@@ -186,9 +186,9 @@ const styles = StyleSheet.create({
     shadowRadius: 0,
     shadowOpacity: 0,
   },
-  itemHeader: {
+  sectionHeader: {
     fontSize: 24,
-    paddingVertical: 8,
+    padding: 8,
     color: '#FBDABB',
     backgroundColor: '#495E57',
   },
@@ -200,6 +200,20 @@ const styles = StyleSheet.create({
   },
   itemInfo: {
     flex: 1,
+  }, 
+  itemName: {
+    fontSize: 18,
+  },
+  itemDesc: {
+    
+  },
+  itemPrice: {
+    fontWeight: 'bold',
+  },
+  itemImage: {
+    borderRadius: 5
+,    width: 100,
+    height: 100,
   }, 
   title: {
     fontSize: 20,
