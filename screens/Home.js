@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, Image, Text, Pressable, StyleSheet, SectionList } from 'react-native';
+import { View, Image, Text, Pressable, StyleSheet, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import debounce from 'lodash.debounce';
 import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../components/database';
 import { Searchbar } from 'react-native-paper';
-import { getSectionListData, useUpdateEffect } from '../utils/utils';
+import { getFlatListData, useUpdateEffect } from '../utils/utils';
 import Filters from '../components/Filters';
 
 const API_URL = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json';
@@ -61,10 +61,10 @@ const Home = ({ navigation }) => {
           saveMenuItems(menuItems);
         }
 
-        const sectionListData = getSectionListData(menuItems);
+        const FlatListData = getFlatListData(menuItems);
         const user = await AsyncStorage.getItem('user');
 
-        setData(sectionListData);
+        setData(FlatListData);
         setUser(JSON.parse(user));
       } catch (e) {
         console.error(e);
@@ -83,9 +83,9 @@ const Home = ({ navigation }) => {
       
       try {
         const menuItems = await filterByQueryAndCategories(query, activeCategories);
-        const sectionListData = getSectionListData(menuItems);
+        const FlatListData = getFlatListData(menuItems);
 
-        setData(sectionListData);
+        setData(FlatListData);
       } catch (e) {
         console.error(e);
       }
@@ -153,8 +153,8 @@ const Home = ({ navigation }) => {
         onChange={handleFiltersChange}
         sections={sections}
       />
-      <SectionList
-        style={styles.sectionList}
+      <FlatList
+        style={styles.FlatList}
         sections={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  sectionList: {
+  FlatList: {
     paddingHorizontal: 16,
   },
   searchBar: {
