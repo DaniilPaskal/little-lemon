@@ -19,13 +19,13 @@ export default function App() {
         return {
           ...prevState,
           isLoading: false,
-          isLoggedIn: action.isLoggedIn
+          isOnboardingComplete: action.isOnboardingComplete
         };
       }
     },
     {
       isLoading: true,
-      isLoggedIn: false
+      isOnboardingComplete: false
     }
   )
   
@@ -44,9 +44,9 @@ export default function App() {
           console.error(e);
       } finally {
         if (profile) {
-          dispatch({ type: 'LOG_IN', isLoggedIn: true });
+          dispatch({ type: 'LOG_IN', isOnboardingComplete: true });
         } else {
-          dispatch({ type: 'LOG_IN', isLoggedIn: false });
+          dispatch({ type: 'LOG_IN', isOnboardingComplete: false });
         }
       }
     })();
@@ -61,7 +61,7 @@ export default function App() {
         console.error(e);
       }
 
-      dispatch({ type: 'LOG_IN', isLoggedIn: true});
+      dispatch({ type: 'LOG_IN', isOnboardingComplete: true});
     },
     logOut: async () => {
       try {
@@ -70,7 +70,7 @@ export default function App() {
         console.error(e);
       }
 
-      dispatch({ type: 'LOG_IN', isLoggedIn: false});
+      dispatch({ type: 'LOG_IN', isOnboardingComplete: false});
     },
     update: async (data) => {
       try {
@@ -92,7 +92,7 @@ export default function App() {
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         <Stack.Navigator>
-          {state.isLoggedIn ? (
+          {state.isOnboardingComplete ? (
             <>
               <Stack.Screen name='Home' component={Home} />
               <Stack.Screen name='Profile' component={Profile} />
