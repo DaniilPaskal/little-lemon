@@ -133,9 +133,15 @@ const Home = ({ navigation }) => {
           </Pressable>
       </View>
       
-      <View>
-        <Text style={styles.regularText}>
-          Order from our menu below!
+      <View style={styles.heroSection}>
+        <Text style={styles.header}>
+          Little Lemon
+        </Text>
+        <Text style={styles.subheader}>
+          Chicago
+        </Text>
+        <Text style={styles.heroText}>
+          We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.
         </Text>
         <Searchbar
           placeholder="Search"
@@ -148,6 +154,10 @@ const Home = ({ navigation }) => {
           elevation={0}
         />
       </View>
+      
+      <Text style={styles.regularText}>
+          ORDER FOR DELIVERY!
+      </Text>
       <Filters
         selections={filterSelections}
         onChange={handleFiltersChange}
