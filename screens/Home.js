@@ -130,10 +130,10 @@ const Home = ({ navigation }) => {
       </View>
       
       <View style={styles.heroSection}>
-        <Text style={styles.header}>
+        <Text style={styles.heroHeader}>
           Little Lemon
         </Text>
-        <Text style={styles.subheader}>
+        <Text style={styles.heroSubheader}>
           Chicago
         </Text>
         <Text style={styles.heroText}>
@@ -141,11 +141,11 @@ const Home = ({ navigation }) => {
         </Text>
         <Searchbar
           placeholder="Search"
-          placeholderTextColor="white"
+          placeholderTextColor="gray"
           onChangeText={handleSearchChange}
           value={searchBarText}
           style={styles.searchBar}
-          iconColor="white"
+          iconColor="black"
           inputStyle={{ color: 'white' }}
           elevation={0}
         />
@@ -160,7 +160,7 @@ const Home = ({ navigation }) => {
         sections={sections}
       />
       <FlatList
-        style={styles.FlatList}
+        style={styles.flatList}
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -180,14 +180,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  FlatList: {
+  heroSection: {
+    backgroundColor: '#495E57',
+  },
+  heroHeader: {
+
+  },
+  heroSubheader: {
+
+  },
+  heroText: {
+
+  },
+  flatList: {
     paddingHorizontal: 16,
   },
   searchBar: {
     marginBottom: 24,
-    backgroundColor: '#495E57',
+    backgroundColor: '#FFF',
     shadowRadius: 0,
     shadowOpacity: 0,
+    width: 400,
   },
   sectionHeader: {
     fontSize: 24,
@@ -214,8 +227,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   itemImage: {
-    borderRadius: 5
-,    width: 100,
+    borderRadius: 5,
+    width: 100,
     height: 100,
   }, 
   title: {
