@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import debounce from 'lodash.debounce';
 import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../components/database';
 import { Searchbar } from 'react-native-paper';
-import { getSectionListData, useUpdateEffect } from '../utils/utils';
+import { useUpdateEffect } from '../utils/utils';
 import Filters from '../components/Filters';
 
 const API_URL = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json';
@@ -54,6 +54,7 @@ const Home = ({ navigation }) => {
     (async () => {
       try {
         await createTable();
+        const user = await AsyncStorage.getItem('user');
         var menuItems = await getMenuItems();
 
         if (menuItems.length === 0) {
@@ -61,10 +62,7 @@ const Home = ({ navigation }) => {
           saveMenuItems(menuItems);
         }
 
-        const FlatListData = getSectionListData(menuItems);
-        const user = await AsyncStorage.getItem('user');
-
-        setData(FlatListData);
+        setData(menuItems);
         setUser(JSON.parse(user));
       } catch (e) {
         console.error(e);
@@ -83,9 +81,7 @@ const Home = ({ navigation }) => {
       
       try {
         const menuItems = await filterByQueryAndCategories(query, activeCategories);
-        const FlatListData = getSectionListData(menuItems);
-
-        setData(FlatListData);
+        setData(menuItems);
       } catch (e) {
         console.error(e);
       }
@@ -165,13 +161,10 @@ const Home = ({ navigation }) => {
       />
       <FlatList
         style={styles.FlatList}
-        sections={data}
+        data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <Item name={item.name} price={item.price} description={item.description} image={item.image} />
-        )}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.sectionHeader}>{title}</Text>
         )}
       />
     </View>
