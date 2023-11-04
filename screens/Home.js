@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import debounce from 'lodash.debounce';
 import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../components/database';
 import { Searchbar } from 'react-native-paper';
-import { getFlatListData, useUpdateEffect } from '../utils/utils';
+import { getSectionListData, useUpdateEffect } from '../utils/utils';
 import Filters from '../components/Filters';
 
 const API_URL = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json';
@@ -61,7 +61,7 @@ const Home = ({ navigation }) => {
           saveMenuItems(menuItems);
         }
 
-        const FlatListData = getFlatListData(menuItems);
+        const FlatListData = getSectionListData(menuItems);
         const user = await AsyncStorage.getItem('user');
 
         setData(FlatListData);
@@ -83,7 +83,7 @@ const Home = ({ navigation }) => {
       
       try {
         const menuItems = await filterByQueryAndCategories(query, activeCategories);
-        const FlatListData = getFlatListData(menuItems);
+        const FlatListData = getSectionListData(menuItems);
 
         setData(FlatListData);
       } catch (e) {
@@ -141,7 +141,7 @@ const Home = ({ navigation }) => {
           Chicago
         </Text>
         <Text style={styles.heroText}>
-          We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.
+          We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.yyyy
         </Text>
         <Searchbar
           placeholder="Search"
