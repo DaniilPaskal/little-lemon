@@ -137,7 +137,7 @@ const Home = ({ navigation }) => {
           Chicago
         </Text>
         <Text style={styles.heroText}>
-          We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.yyyy
+          We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.
         </Text>
         <Searchbar
           placeholder="Search"
@@ -182,26 +182,30 @@ const styles = StyleSheet.create({
   },
   heroSection: {
     backgroundColor: '#495E57',
-    color: '#FFF',
+    padding: 8,
   },
   heroHeader: {
+    color: 'yellow',
     fontSize: 24,
   },
   heroSubheader: {
+    color: '#FFF',
     fontSize: 18,
+    marginBottom: 8,
   },
   heroText: {
-
-  },
-  flatList: {
-    paddingHorizontal: 16,
+    color: '#FFF',
   },
   searchBar: {
-    marginBottom: 24,
+    margin: 8,
     backgroundColor: '#FFF',
     shadowRadius: 0,
     shadowOpacity: 0,
-    width: 400,
+    width: 300,
+    alignSelf: 'center',
+  },
+  flatList: {
+    paddingHorizontal: 16,
   },
   sectionHeader: {
     fontSize: 24,
