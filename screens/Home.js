@@ -182,12 +182,13 @@ const styles = StyleSheet.create({
   },
   heroSection: {
     backgroundColor: '#495E57',
+    color: '#FFF',
   },
   heroHeader: {
-
+    fontSize: 24,
   },
   heroSubheader: {
-
+    fontSize: 18,
   },
   heroText: {
 
