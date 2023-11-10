@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, Image, Text, Pressable, StyleSheet, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import debounce from 'lodash.debounce';
-import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../components/database';
+import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../components/Database';
 import { Searchbar } from 'react-native-paper';
 import { useUpdateEffect } from '../utils/utils';
 import Filters from '../components/Filters';
