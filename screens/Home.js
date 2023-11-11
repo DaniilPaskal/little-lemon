@@ -146,7 +146,6 @@ const Home = ({ navigation }) => {
           value={searchBarText}
           style={styles.searchBar}
           iconColor="black"
-          inputStyle={{ color: 'white' }}
           elevation={0}
         />
       </View>
@@ -197,6 +196,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   searchBar: {
+    color: 'black',
     margin: 8,
     backgroundColor: '#FFF',
     shadowRadius: 0,
