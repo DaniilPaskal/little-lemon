@@ -102,7 +102,7 @@ const Profile = ({ navigation }) => {
                 <Text style={styles.regularText}>
                         Avatar
                 </Text>
-                <View style={styles.headerWrapper}>
+                <View style={styles.avatarWrapper}>
                     {user.image ? (
                         <Image style={styles.avatar} source={{ uri: user.image }} />
                     ) : (
@@ -114,7 +114,7 @@ const Profile = ({ navigation }) => {
                         </View>
                     )}
                     <Pressable
-                        style={styles.buttonEnabled}
+                        style={styles.avatarButton}
                         onPress={handleChangeImage}
                     >
                         <Text style={styles.buttonText}>
@@ -122,7 +122,7 @@ const Profile = ({ navigation }) => {
                         </Text>
                     </Pressable>
                     <Pressable
-                        style={styles.buttonEnabled}
+                        style={styles.avatarButton}
                         onPress={handleRemoveImage}
                     >
                         <Text style={styles.buttonText}>
@@ -218,6 +218,17 @@ const styles = StyleSheet.create({
     headerWrapper: {
         flexDirection: 'row',
         justifyContent: 'center',
+    },
+    avatarWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    avatarButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 16,
+        backgroundColor: '#495E57',
+        borderRadius: 50,
     },
     sectionList: {
         paddingHorizontal: 16,
