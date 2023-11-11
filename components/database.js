@@ -36,11 +36,9 @@ export function saveMenuItems(menuItems) {
 }
 
 export async function filterByQueryAndCategories(query, activeCategories) {
-  console.log('??????')
-  console.log(activeCategories)
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      tx.executeSql('select * from menuitems where name like ? and category in (?, ?, ?)', [`%${query}%`, ...activeCategories], (_, { rows }) => {
+      tx.executeSql('select * from menuitems where name like ? and category in (?, ?, ?)', [query, ...activeCategories], (_, { rows }) => {
         resolve(rows._array);
       });
     });
