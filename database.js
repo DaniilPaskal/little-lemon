@@ -26,6 +26,7 @@ export async function getMenuItems() {
 }
 
 export function saveMenuItems(menuItems) {
+  console.log(menuItems)
   db.transaction((tx) => {
     tx.executeSql(
       `insert into menuitems (id, name, price, description, image, category) values ${menuItems.map((item) =>

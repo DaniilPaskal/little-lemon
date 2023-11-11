@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, Image, Text, Pressable, StyleSheet, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import debounce from 'lodash.debounce';
-import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../components/Database';
+import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../database';
 import { Searchbar } from 'react-native-paper';
 import { useUpdateEffect } from '../utils/utils';
 import Filters from '../components/Filters';
@@ -60,6 +60,9 @@ const Home = ({ navigation }) => {
         if (menuItems.length === 0) {
           menuItems = await fetchData();
           saveMenuItems(menuItems);
+          
+          menuItems = await getMenuItems();
+          console.log(menuItems)
         }
 
         setData(menuItems);
