@@ -20,8 +20,11 @@ const Filters = ({ onChange, selections, sections }) => {
             borderRadius: 50,
           }}>
           <View style={styles.filterButton}>
-            <Text style={{ color: selections[index] ? 'black' : 'white' }}>
-              {section}
+            <Text style={{ 
+              color: selections[index] ? 'black' : 'white',
+              fontWeight: 'bold',
+            }}>
+              {section.charAt(0).toUpperCase() + section.slice(1)}
             </Text>
           </View>
         </TouchableOpacity>
