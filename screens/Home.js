@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, Image, Text, Pressable, StyleSheet, FlatList } from 'react-native';
+import { Searchbar } from 'react-native-paper';
+import { useFonts } from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import debounce from 'lodash.debounce';
+import * as SplashScreen from 'expo-splash-screen';
 import { createTable, getMenuItems, saveMenuItems, filterByQueryAndCategories } from '../database';
-import { Searchbar } from 'react-native-paper';
 import { useUpdateEffect } from '../utils/utils';
 import Filters from '../components/Filters';
 
@@ -60,9 +62,6 @@ const Home = ({ navigation }) => {
         if (menuItems.length === 0) {
           menuItems = await fetchData();
           saveMenuItems(menuItems);
-          
-          menuItems = await getMenuItems();
-          console.log(menuItems)
         }
 
         setData(menuItems);
@@ -108,8 +107,24 @@ const Home = ({ navigation }) => {
     setFilterSelections(arrayCopy);
   };
 
+  const [fontsLoaded, fontError] = useFonts({
+    'Karla-Medium': require('../assets/fonts/Karla-Medium.ttf'),
+    'Karla-Bold': require('../assets/fonts/Karla-Bold.ttf'),
+    'MarkaziText-Medium': require('../assets/fonts/MarkaziText-Medium.ttf'),
+  })
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onLayoutRootView}>
       <View style={styles.headerWrapper}>
           <Image
               style={styles.image}
@@ -187,16 +202,19 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   heroHeader: {
-    color: 'yellow',
-    fontSize: 24,
+    color: '#F4CE14',
+    fontSize: 32,
+    fontFamily: 'MarkaziText-Medium',
   },
   heroSubheader: {
     color: '#FFF',
+    fontFamily: 'Karla-Medium',
     fontSize: 18,
     marginBottom: 8,
   },
   heroText: {
     color: '#FFF',
+    fontFamily: 'Karla-Medium',
   },
   searchBar: {
     color: 'black',
@@ -264,16 +282,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#495E57',
   },
   emptyAvatarText: {
-      fontSize: 32,
+      fontSize: 36,
+      fontFamily: 'Karla-Medium',
       color: '#FFF',
       textAlign: 'center',
-      marginTop: 12
+      marginTop: 10
   },
   regularText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
     color: 'black',
+    fontSize: 18,
+    fontFamily: 'Karla-Bold',
+    fontWeight: 'bold',
+    padding: 8,
+    textAlign: 'center',
   }
 })
 
