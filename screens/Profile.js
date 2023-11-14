@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { View, Image, Text, TextInput, Pressable, StyleSheet, ScrollView, Platform, ToastAndroid, AlertIOS } from 'react-native';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import Checkbox from 'expo-checkbox';
@@ -84,8 +86,24 @@ const Profile = ({ navigation }) => {
         notify('Changes saved!');
     }
 
+    const [fontsLoaded, fontError] = useFonts({
+        'Karla-Medium': require('../assets/fonts/Karla-Medium.ttf'),
+        'Karla-Bold': require('../assets/fonts/Karla-Bold.ttf'),
+        'MarkaziText-Medium': require('../assets/fonts/MarkaziText-Medium.ttf'),
+      })
+    
+      const onLayoutRootView = useCallback(async () => {
+        if (fontsLoaded || fontError) {
+          await SplashScreen.hideAsync();
+        }
+      }, [fontsLoaded, fontError]);
+    
+      if (!fontsLoaded && !fontError) {
+        return null;
+    }
+
     return (
-        <View style={styles.container} behavior={'height'}>
+        <View style={styles.container} behavior={'height'} onLayout={onLayoutRootView}>
             <View style={styles.headerWrapper}>
                 <Image
                     style={styles.image}
@@ -229,30 +247,6 @@ const styles = StyleSheet.create({
         padding: 16,
         backgroundColor: '#495E57',
         borderRadius: 50,
-    },
-    sectionList: {
-        paddingHorizontal: 16,
-    },
-    searchBar: {
-        marginBottom: 24,
-        backgroundColor: '#495E57',
-        shadowRadius: 0,
-        shadowOpacity: 0,
-    },
-    itemHeader: {
-        fontSize: 24,
-        paddingVertical: 8,
-        color: '#FBDABB',
-        backgroundColor: '#495E57',
-    },
-    item: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 16,
-    },
-    itemInfo: {
-        flex: 1,
     }, 
     title: {
         fontSize: 20,
@@ -279,14 +273,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#495E57',
     },
     emptyAvatarText: {
-        fontSize: 32,
+        fontSize: 36,
+        fontFamily: 'Karla-Medium',
         color: '#FFF',
         textAlign: 'center',
-        marginTop: 12
+        marginTop: 10
     },
     regularText: {
         fontSize: 18,
         fontWeight: 'bold',
+        fontFamily: 'Karla-Bold',
         textAlign: 'center',
         color: 'black',
         marginVertical: 8
@@ -323,6 +319,7 @@ const styles = StyleSheet.create({
         color: '#EDEFEE',
         textAlign: 'center',
         fontSize: 18,
+        fontFamily: 'Karla-Medium',
     }
 })
 
