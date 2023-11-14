@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { View, Image, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { validateEmail } from '../utils/utils';
 import { AuthContext } from '../contexts/AuthContext';
@@ -30,8 +32,24 @@ const Onboarding = ({ navigation }) => {
         logIn({ ...user });
     }
 
+    const [fontsLoaded, fontError] = useFonts({
+        'Karla-Medium': require('../assets/fonts/Karla-Medium.ttf'),
+        'Karla-Bold': require('../assets/fonts/Karla-Bold.ttf'),
+        'MarkaziText-Medium': require('../assets/fonts/MarkaziText-Medium.ttf'),
+      })
+    
+      const onLayoutRootView = useCallback(async () => {
+        if (fontsLoaded || fontError) {
+          await SplashScreen.hideAsync();
+        }
+      }, [fontsLoaded, fontError]);
+    
+      if (!fontsLoaded && !fontError) {
+        return null;
+      }
+
     return (
-        <View style={styles.container}>
+        <View style={styles.container} onLayout={onLayoutRootView}>
             <View style={styles.headerWrapper}>
                 <Image
                 style={styles.image}
@@ -93,6 +111,7 @@ const styles = StyleSheet.create({
     regularText: {
         fontSize: 18,
         fontWeight: 'bold',
+        fontFamily: 'Karla-Bold',
         padding: 50,
         marginVertical: 8,
         textAlign: 'center',
@@ -127,6 +146,7 @@ const styles = StyleSheet.create({
         color: '#EDEFEE',
         textAlign: 'center',
         fontSize: 18,
+        fontFamily: 'Karla-Medium',
     }
 })
 
