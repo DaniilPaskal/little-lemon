@@ -282,11 +282,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#495E57',
   },
   emptyAvatarText: {
-      fontSize: 36,
-      fontFamily: 'Karla-Medium',
-      color: '#FFF',
-      textAlign: 'center',
-      marginTop: 10
+    fontSize: 36,
+    fontFamily: 'Karla-Medium',
+    color: '#FFF',
+    textAlign: 'center',
+    marginTop: 10
   },
   regularText: {
     color: 'black',
