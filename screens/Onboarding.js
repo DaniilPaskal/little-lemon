@@ -59,6 +59,19 @@ const Onboarding = ({ navigation }) => {
                 accessibilityLabel={'Little Lemon Logo'}
                 />
             </View>
+
+            <View style={styles.heroSection}>
+                <Text style={styles.heroHeader}>
+                    Little Lemon
+                </Text>
+                <Text style={styles.heroSubheader}>
+                    Chicago
+                </Text>
+                <Text style={styles.heroText}>
+                    We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.
+                </Text>
+            </View>
+
             <Text style={styles.regularText}>
                 Let us get to know you!
             </Text>
@@ -107,6 +120,25 @@ const styles = StyleSheet.create({
     image: {
         width: 150,
         height: 150,
+    },
+    heroSection: {
+        backgroundColor: '#495E57',
+        padding: 8,
+    },
+    heroHeader: {
+        color: '#F4CE14',
+        fontSize: 32,
+        fontFamily: 'MarkaziText-Medium',
+    },
+    heroSubheader: {
+        color: '#FFF',
+        fontFamily: 'Karla-Medium',
+        fontSize: 18,
+        marginBottom: 8,
+    },
+    heroText: {
+        color: '#FFF',
+        fontFamily: 'Karla-Medium',
     },
     regularText: {
         fontSize: 18,
